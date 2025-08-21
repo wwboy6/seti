@@ -26,6 +26,11 @@
 
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
+
+function normalizeRotation(val: number): number {
+  return ((val % 8) + 8) % 8
+}
+
 // Handle paste event for spreadsheet-like input
 function onPaste(event: ClipboardEvent) {
   const active = document.activeElement as HTMLInputElement | null
@@ -41,8 +46,7 @@ function onPaste(event: ClipboardEvent) {
   values.forEach((v, i) => {
     const val = parseInt(v, 10)
     if (!isNaN(val) && idx + i <= 3) {
-      const mod = ((val % 8) + 8) % 8
-      rotations.value[idx + i] = mod
+      rotations.value[idx + i] = normalizeRotation(val)
     }
   })
   // Optionally, move focus to the last input
@@ -69,15 +73,13 @@ const initialRotations = [0, 3, 2, 5, 0]
 
 function onRotationInput(event: Event, idx: number) {
   const val = parseInt((event.target as HTMLInputElement).value, 10)
-  // Loop value to 0-7
-  const mod = ((val % 8) + 8) % 8
-  rotations.value[idx] = mod
+  rotations.value[idx] = normalizeRotation(val)
 }
 
 // Helper to compute rotation style for each image
 function rotationStyle(idx: number) {
   // 8 steps, so 360/8 = 45deg per step
-  const deg = (rotations.value[idx] + initialRotations[idx]) % 8 * -45
+  const deg = normalizeRotation(rotations.value[idx] + initialRotations[idx]) * -45
   return {
     transform: `scale(0.3) rotate(${deg}deg)`
   }
