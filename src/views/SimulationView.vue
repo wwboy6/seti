@@ -21,14 +21,41 @@
         :style="rotationStyle(idx)"
       />
     </div>
+    <button class="toggle-btn" @click="showButtons = !showButtons">
+      {{ showButtons ? 'Hide' : 'Show' }} Quick Controls
+    </button>
+    <div class="button-rows" v-show="showButtons">
+      <!-- First row: small -->
+      <div class="button-row">
+        <button @click="incInputs([3], 1)">+small</button>
+        <button @click="incInputs([3], -1)">-small</button>
+      </div>
+      <!-- Second row: middle -->
+      <div class="button-row">
+        <button @click="incInputs([2,3], 1)">+middle</button>
+        <button @click="incInputs([2,3], -1)">-middle</button>
+      </div>
+      <!-- Third row: large -->
+      <div class="button-row">
+        <button @click="incInputs([1,2,3], 1)">+large</button>
+        <button @click="incInputs([1,2,3], -1)">-large</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
+const showButtons = ref(false)
 
 function normalizeRotation(val: number): number {
   return ((val % 8) + 8) % 8
+}
+
+function incInputs(indices: number[], delta: number) {
+  indices.forEach(idx => {
+    rotations.value[idx] = normalizeRotation(rotations.value[idx] + delta)
+  })
 }
 
 // Handle paste event for spreadsheet-like input
@@ -93,6 +120,46 @@ function rotationStyle(idx: number) {
   align-items: center;
   justify-content: center;
   min-height: 60vh;
+}
+
+.button-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.toggle-btn {
+  margin-bottom: 0.5rem;
+  padding: 0.3rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+  background: #f8f8f8;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.toggle-btn:hover {
+  background: #e0e0e0;
+}
+
+.button-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+button {
+  padding: 0.3rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+  background: #f8f8f8;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #e0e0e0;
 }
 
 h2 {
