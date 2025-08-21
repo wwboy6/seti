@@ -1,12 +1,13 @@
 <template>
   <div class="simulation-container">
     <h2>Solar Simulation</h2>
-    <div class="rotation-inputs">
+    <div class="rotation-inputs" @paste="onPaste">
       <label v-for="i in 3" :key="i" class="rotation-label">
         <input
           type="number"
           :value="rotations[i]"
           @input="onRotationInput($event, i)"
+          :data-rotation-idx="i"
         />
       </label>
     </div>
@@ -24,7 +25,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
+// Handle paste event for spreadsheet-like input
+function onPaste(event: ClipboardEvent) {
+  const active = document.activeElement as HTMLInputElement | null
+  if (!active) return
+  const idx = Number(active.getAttribute('data-rotation-idx'))
+  if (isNaN(idx)) return
+  const text = event.clipboardData?.getData('text') || ''
+  // Split by tab or whitespace
+  const values = text.split(/\s+/).filter(Boolean)
+  if (values.length < 2) return // Only handle multi-cell paste
+  console.warn('Pasting values:', values, 'at index:', idx)
+  event.preventDefault()
+  values.forEach((v, i) => {
+    const val = parseInt(v, 10)
+    if (!isNaN(val) && idx + i <= 3) {
+      const mod = ((val % 8) + 8) % 8
+      rotations.value[idx + i] = mod
+    }
+  })
+  // Optionally, move focus to the last input
+  nextTick(() => {
+    const inputs = document.querySelectorAll<HTMLInputElement>('.rotation-label input')
+    if (inputs[idx + values.length - 1]) {
+      inputs[idx + values.length - 1].focus()
+    }
+  })
+}
 
 // Images from bottom to top
 const images = [
