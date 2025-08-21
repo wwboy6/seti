@@ -12,6 +12,7 @@
       </label>
     </div>
     <div class="spin-row">
+      <span class="spin-label" :class="spinTypeClass" >{{ spinTypeLabel }}</span>
       <input
         type="number"
         v-model.number="spinNumber"
@@ -58,6 +59,27 @@
 
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
+import { computed } from 'vue'
+
+const spinType = computed(() => {
+  const rem = spinNumber.value % 3
+  if (rem === 1) return 'small'
+  if (rem === 2) return 'middle'
+  return 'large'
+})
+
+const spinTypeLabel = computed(() => {
+  if (spinType.value === 'small') return 'small'
+  if (spinType.value === 'middle') return 'middle'
+  return 'large'
+})
+
+const spinTypeClass = computed(() => {
+  if (spinType.value === 'small') return 'spin-label-small'
+  if (spinType.value === 'middle') return 'spin-label-middle'
+  return 'spin-label-large'
+})
+
 const showButtons = ref(false)
 
 const spinNumber = ref(1)
@@ -174,6 +196,30 @@ function rotationStyle(idx: number) {
   justify-content: center;
   margin-bottom: 1.5rem;
   gap: 0.5rem;
+}
+.spin-label {
+  display: inline-block;
+  width: 76px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.05rem;
+  border-radius: 6px;
+  margin-right: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  letter-spacing: 0.5px;
+  border: 1px solid #eee;
+}
+.spin-label-small {
+  background: #fff9d6;
+  color: #b8860b;
+}
+.spin-label-middle {
+  background: #ffe5cc;
+  color: #d2691e;
+}
+.spin-label-large {
+  background: #e6f0ff;
+  color: #1e3a8a;
 }
 .spin-input {
   font-size: 1.1rem;
