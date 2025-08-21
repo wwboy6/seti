@@ -5,9 +5,8 @@
       <label v-for="i in 3" :key="i" class="rotation-label">
         <input
           type="number"
-          min="0"
-          max="7"
-          v-model.number="rotations[i]"
+          :value="rotations[i]"
+          @input="onRotationInput($event, i)"
         />
       </label>
     </div>
@@ -39,6 +38,13 @@ const images = [
 // Array of 5 integers, 0-7, for rotation state of each image
 const rotations = ref([0, 0, 0, 0, 0])
 const initialRotations = [0, 3, 2, 5, 0]
+
+function onRotationInput(event: Event, idx: number) {
+  const val = parseInt((event.target as HTMLInputElement).value, 10)
+  // Loop value to 0-7
+  const mod = ((val % 8) + 8) % 8
+  rotations.value[idx] = mod
+}
 
 // Helper to compute rotation style for each image
 function rotationStyle(idx: number) {
