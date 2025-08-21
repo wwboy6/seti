@@ -11,6 +11,18 @@
         />
       </label>
     </div>
+    <div class="spin-row">
+      <input
+        type="number"
+        v-model.number="spinNumber"
+        min="1"
+        class="spin-input"
+        placeholder="spin number"
+        style="width: 6rem; margin-right: 0.5rem;"
+      />
+      <button @click="onSpinInc">+spin</button>
+      <button @click="onSpinDec">-spin</button>
+    </div>
     <div class="solar-stack">
       <img
         v-for="(img, idx) in images"
@@ -47,6 +59,33 @@
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
 const showButtons = ref(false)
+
+const spinNumber = ref(1)
+
+function onSpinInc() {
+  const rem = spinNumber.value % 3
+  if (rem === 1) {
+    incInputs([3], 1)
+  } else if (rem === 2) {
+    incInputs([2,3], 1)
+  } else {
+    incInputs([1,2,3], 1)
+  }
+  spinNumber.value++
+}
+
+function onSpinDec() {
+  if (spinNumber.value <= 1) return
+  spinNumber.value--
+  const rem = spinNumber.value % 3
+  if (rem === 1) {
+    incInputs([3], -1)
+  } else if (rem === 2) {
+    incInputs([2,3], -1)
+  } else {
+    incInputs([1,2,3], -1)
+  }
+}
 
 function normalizeRotation(val: number): number {
   return ((val % 8) + 8) % 8
@@ -127,6 +166,19 @@ function rotationStyle(idx: number) {
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
+}
+
+.spin-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+}
+.spin-input {
+  font-size: 1.1rem;
+  padding: 0.2rem 0.4rem;
+  text-align: center;
 }
 
 .toggle-btn {
