@@ -1,6 +1,16 @@
 <template>
   <div class="simulation-container">
     <h2>Solar Simulation</h2>
+    <div class="rotation-inputs">
+      <label v-for="i in 3" :key="i" class="rotation-label">
+        <input
+          type="number"
+          min="0"
+          max="7"
+          v-model.number="rotations[i]"
+        />
+      </label>
+    </div>
     <div class="solar-stack">
       <img
         v-for="(img, idx) in images"
@@ -51,6 +61,19 @@ function rotationStyle(idx: number) {
 
 h2 {
   margin-bottom: 2rem;
+}
+
+.rotation-inputs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.rotation-label input {
+  width: 3rem;
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 0.2rem 0.4rem;
 }
 
 .solar-stack {
