@@ -50,6 +50,8 @@
         class="solar-image"
         :style="sectorStyle(idx)"
       >
+      
+        <img class="sector-name" :src="`/seti/img/${img}-name.png`"/>
         <img :src="`/seti/img/${img}.png`"/>
       </div>
     </div>
@@ -344,6 +346,10 @@ h2 {
   object-fit: contain;
   pointer-events: none;
   scale: .3;
+}
+.sector-name {
+  position: absolute;
+  width: 100%;
 }
 .rotation-inputs {
   align-items: center;
