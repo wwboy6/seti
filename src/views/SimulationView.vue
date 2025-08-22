@@ -301,7 +301,8 @@ function onSectorRotationInput(event: Event, idx: number) {
 }
 
 button {
-  padding: 0.3rem 1.2rem;
+  padding: 0.3rem 1rem;
+  width: 100%;
   font-size: 1rem;
   border-radius: 4px;
   border: 1px solid #aaa;

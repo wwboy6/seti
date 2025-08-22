@@ -8,6 +8,7 @@ import { RouterLink, RouterView } from 'vue-router'
     <h1>SETI tools by Kay Chan</h1>
     <nav>
       <RouterLink to="/simulation">Simulation</RouterLink>
+      <RouterLink to="/gallery">Gallery</RouterLink>
     </nav>
   </header>
   <main>
