@@ -1,6 +1,16 @@
 <template>
   <div class="simulation-container">
     <h2>Solar Simulation</h2>
+    <div class="sector-rotation-inputs">
+      <label v-for="(_, i) in sectorRotations" :key="i" class="rotation-label">
+        <input
+          type="number"
+          :value="sectorRotations[i]"
+          @input="onSectorRotationInput($event, i)"
+          :data-sector-rotation-idx="i"
+        />
+      </label>
+    </div>
     <div class="rotation-inputs" @paste="onPaste">
       <label v-for="i in 3" :key="i" class="rotation-label">
         <input
@@ -10,6 +20,7 @@
           :data-rotation-idx="i"
         />
       </label>
+      <button class="random-btn" @click="randomizeRotations">random</button>
     </div>
     <div class="spin-row">
       <span class="spin-label" :class="spinTypeClass" >{{ spinTypeLabel }}</span>
@@ -33,6 +44,14 @@
         class="solar-image wheel"
         :style="rotationStyle(idx)"
       />
+      <div
+        v-for="(img, idx) in sectorImages"
+        :key="img"
+        class="solar-image"
+        :style="sectorStyle(idx)"
+      >
+        <img :src="`/seti/img/${img}.png`"/>
+      </div>
     </div>
     <button class="toggle-btn" @click="showButtons = !showButtons">
       {{ showButtons ? 'Hide' : 'Show' }} Quick Controls
@@ -58,8 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
-import { computed } from 'vue'
+import { ref, nextTick, computed } from 'vue'
 
 const spinType = computed(() => {
   const rem = spinNumber.value % 3
@@ -81,8 +99,22 @@ const spinTypeClass = computed(() => {
 })
 
 const showButtons = ref(false)
-
 const spinNumber = ref(1)
+
+function randomizeRotations() {
+  for (let i = 1; i <= 3; i++) {
+    rotations.value[i] = Math.floor(Math.random() * 8)
+  }
+  const minSectorRotation = Math.floor(Math.random() * 2)
+  for (let i = 0; i < 4; i++) {
+    sectorRotations.value[i] = minSectorRotation + i * 2
+  }
+  sectorRotations.value = sectorRotations.value
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+  spinNumber.value = 1
+}
 
 function onSpinInc() {
   const rem = spinNumber.value % 3
@@ -169,9 +201,26 @@ function rotationStyle(idx: number) {
   // 8 steps, so 360/8 = 45deg per step
   const deg = normalizeRotation(rotations.value[idx] + initialRotations[idx]) * -45
   return {
-    transform: `scale(0.3) rotate(${deg}deg)`
+    transform: `rotate(${deg}deg)`
   }
 }
+
+const sectorImages = ['sector1', 'sector2', 'sector3', 'sector4']
+const sectorRotations = ref([0, 2, 4, 6])
+
+function sectorStyle(idx: number) {
+  // 8 steps, so 360/8 = 45deg per step
+  const deg = normalizeRotation(sectorRotations.value[idx]) * -45
+  return {
+    transform: `rotate(${deg}deg) translate(0,-385px)`
+  }
+}
+
+function onSectorRotationInput(event: Event, idx: number) {
+  const val = parseInt((event.target as HTMLInputElement).value, 10)
+  sectorRotations.value[idx] = normalizeRotation(val)
+}
+
 </script>
 
 <style scoped>
@@ -264,10 +313,13 @@ h2 {
   margin-bottom: 2rem;
 }
 
-.rotation-inputs {
+.rotation-inputs, .sector-rotation-inputs {
   display: flex;
   gap: 1rem;
   margin-bottom: 1.5rem;
+}
+.sector-rotation-inputs {
+  margin-bottom: 0.4rem;
 }
 
 .rotation-label input {
@@ -284,11 +336,30 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 2rem;
 }
 
-.solar-image.wheel {
+.solar-image {
   position: absolute;
   object-fit: contain;
   pointer-events: none;
+  scale: .3;
+}
+.rotation-inputs {
+  align-items: center;
+}
+.random-btn {
+  margin-left: 1rem;
+  padding: 0.2rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+  background: #f0f8ff;
+  color: #1e3a8a;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.random-btn:hover {
+  background: #dbeafe;
 }
 </style>
