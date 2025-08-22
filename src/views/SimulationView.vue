@@ -2,6 +2,7 @@
   <div class="simulation-container">
     <h2>Solar Simulation</h2>
     <div class="sector-rotation-inputs">
+      <span>Sector</span>
       <label v-for="(_, i) in sectorRotations" :key="i" class="rotation-label">
         <input
           type="number"
@@ -12,6 +13,7 @@
       </label>
     </div>
     <div class="rotation-inputs" @paste="onPaste">
+      <span>Planet</span>
       <label v-for="i in 3" :key="i" class="rotation-label">
         <input
           type="number"
