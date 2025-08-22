@@ -32,10 +32,10 @@
         min="1"
         class="spin-input"
         placeholder="spin number"
-        style="width: 6rem; margin-right: 0.5rem;"
+        style="width: 3rem; margin-right: 0.5rem;"
       />
-      <button @click="onSpinInc">+spin</button>
-      <button @click="onSpinDec">-spin</button>
+      <button class="spin-button" @click="onSpinInc">+spin</button>
+      <button class="spin-button" @click="onSpinDec">-spin</button>
     </div>
     <div class="solar-stack">
       <img
@@ -301,7 +301,7 @@ function onSectorRotationInput(event: Event, idx: number) {
 }
 
 button {
-  padding: 0.3rem 1rem;
+  padding: 0.3rem .6rem;
   width: 100%;
   font-size: 1rem;
   border-radius: 4px;
@@ -312,6 +312,10 @@ button {
 }
 button:hover {
   background: #e0e0e0;
+}
+
+.spin-button {
+  width: 5em;
 }
 
 h2 {
