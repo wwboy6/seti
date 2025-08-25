@@ -81,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, computed } from 'vue'
+import { ref, nextTick, computed, watch, onMounted } from 'vue'
 
 const spinType = computed(() => {
   const rem = spinNumber.value % 3
@@ -102,8 +102,11 @@ const spinTypeClass = computed(() => {
   return 'spin-label-large'
 })
 
+
 const showButtons = ref(false)
 const spinNumber = ref(1)
+
+const LOCAL_STORAGE_KEY = 'seti-simulation-state-v1'
 
 function randomizeRotations() {
   for (let i = 1; i <= 3; i++) {
@@ -192,6 +195,7 @@ const images = [
 ]
 
 // Array of 5 integers, 0-7, for rotation state of each image
+
 const rotations = ref([0, 0, 0, 0, 0])
 const initialRotations = [0, 3, 2, 5, 0]
 
@@ -209,8 +213,45 @@ function rotationStyle(idx: number) {
   }
 }
 
+
 const sectorImages = ['sector1', 'sector2', 'sector3', 'sector4']
 const sectorRotations = ref([0, 2, 4, 6])
+
+// --- Persistence logic ---
+function saveState() {
+  const state = {
+    rotations: rotations.value,
+    sectorRotations: sectorRotations.value,
+    spinNumber: spinNumber.value,
+  }
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state))
+}
+
+function loadState() {
+  const raw = localStorage.getItem(LOCAL_STORAGE_KEY)
+  if (!raw) return
+  try {
+    const state = JSON.parse(raw)
+    if (Array.isArray(state.rotations) && state.rotations.length === 5) {
+      rotations.value = state.rotations.slice()
+    }
+    if (Array.isArray(state.sectorRotations) && state.sectorRotations.length === 4) {
+      sectorRotations.value = state.sectorRotations.slice()
+    }
+    if (typeof state.spinNumber === 'number') {
+      spinNumber.value = state.spinNumber
+    }
+  } catch (e) {
+    console.error('Failed to load simulation state:', e);
+    console.warn('Save data:', raw);
+  }
+}
+
+onMounted(() => {
+  loadState()
+})
+
+watch([rotations, sectorRotations, spinNumber], saveState, { deep: true })
 
 function sectorStyle(idx: number) {
   // 8 steps, so 360/8 = 45deg per step

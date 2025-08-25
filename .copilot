@@ -3,4 +3,5 @@ When generating or editing a .vue file:
 - Place HTML in the <template> section.
 - Place JavaScript/TypeScript in the <script> or <script setup> section.
 - Place CSS in the <style> section.
+- Do not use semicolons in JavaScript or TypeScript code.
 Never mix content between these sections. Always insert new code into the correct tag.
