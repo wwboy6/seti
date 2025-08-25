@@ -1,25 +1,42 @@
 <template>
   <div class="gallery-container">
     <h2>Gallery</h2>
-    <div class="gallery-section">
+    <div class="gallery-toggle-row">
+      <button
+        v-for="g in galleries"
+        :key="g.key"
+        :class="['gallery-toggle-btn', { active: selectedGallery === g.key }]"
+        @click="selectedGallery = g.key"
+      >
+        {{ g.label }}
+      </button>
+    </div>
+    <div v-if="selectedGallery === 'planet'" class="gallery-section">
       <h3>Planet</h3>
       <div class="gallery-grid">
         <div v-for="img in planetImages" :key="img" class="gallery-item">
           <img :src="`/seti/img/${img}`" :alt="img" @click="openPopup(img)" />
         </div>
       </div>
-      <transition name="backdrop-fade">
-        <div v-if="popupImg" class="mui-backdrop" @click="closePopup">
-          <img class="mui-backdrop-img" :src="`/seti/img/${popupImg}`" :alt="popupImg" @click.stop />
-        </div>
-      </transition>
     </div>
+    <div v-if="selectedGallery === 'alien'" class="gallery-section">
+      <h3>Alien</h3>
+      <div class="gallery-grid">
+        <div v-for="img in alienImages" :key="img" class="gallery-item">
+          <img :src="`/seti/img/${img}`" :alt="img" @click="openPopup(img)" />
+        </div>
+      </div>
+    </div>
+    <transition name="backdrop-fade">
+      <div v-if="popupImg" class="mui-backdrop" @click="closePopup">
+        <img class="mui-backdrop-img" :src="`/seti/img/${popupImg}`" :alt="popupImg" @click.stop />
+      </div>
+    </transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-// List of all planet images (hardcoded for now, can be automated if needed)
 const planetImages = [
   'planet-1-mercury-c.png',
   'planet-2-venus-c.png',
@@ -29,6 +46,19 @@ const planetImages = [
   'planet-6-uranus-c.png',
   'planet-7-neptune-c.png',
 ]
+// List of all planet and alien images (hardcoded for now)
+const alienImages = [
+  'et-anomalies.PNG',
+  'et-centaurians.PNG',
+  'et-exertians.PNG',
+  'et-mascamites.PNG',
+  'et-oumuamua.PNG',
+]
+const galleries = [
+  { key: 'planet', label: 'Planet' },
+  { key: 'alien', label: 'Alien' },
+]
+const selectedGallery = ref('planet')
 
 const popupImg = ref<string|null>(null)
 function openPopup(img: string) {
@@ -100,5 +130,26 @@ function closePopup() {
 }
 .backdrop-fade-enter-from, .backdrop-fade-leave-to {
   opacity: 0;
+}
+.gallery-toggle-row {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+.gallery-toggle-btn {
+  padding: 0.5rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 20px;
+  border: 1px solid #bbb;
+  background: #f8f8f8;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.gallery-toggle-btn.active {
+  background: #1976d2;
+  color: #fff;
+  border-color: #1976d2;
 }
 </style>
