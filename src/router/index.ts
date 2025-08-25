@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/GalleryView.vue'),
     },
     {
+      path: '/links',
+      name: 'links',
+      component: () => import('../views/LinksView.vue'),
+    },
+    {
       path: '/:catchAll(.*)',
       redirect: '/simulation',
     },
