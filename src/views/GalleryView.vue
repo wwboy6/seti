@@ -27,6 +27,14 @@
         </div>
       </div>
     </div>
+    <div v-if="selectedGallery === 'solar'" class="gallery-section">
+      <h3>Solar</h3>
+      <div class="gallery-grid">
+        <div v-for="img in solarImages" :key="img" class="gallery-item">
+          <img :src="`/seti/img/${img}`" :alt="img" @click="openPopup(img)" />
+        </div>
+      </div>
+    </div>
     <transition name="backdrop-fade">
       <div v-if="popupImg" class="mui-backdrop" @click="closePopup">
         <img class="mui-backdrop-img" :src="`/seti/img/${popupImg}`" :alt="popupImg" @click.stop />
@@ -46,6 +54,12 @@ const planetImages = [
   'planet-6-uranus-c.png',
   'planet-7-neptune-c.png',
 ]
+const solarImages = [
+  'wheel1.png',
+  'wheel2.png',
+  'wheel3.png',
+  'wheel4.png',
+]
 // List of all planet and alien images (hardcoded for now)
 const alienImages = [
   'et-anomalies.PNG',
@@ -57,6 +71,7 @@ const alienImages = [
 const galleries = [
   { key: 'planet', label: 'Planet' },
   { key: 'alien', label: 'Alien' },
+  { key: 'solar', label: 'Solar' },
 ]
 const selectedGallery = ref('planet')
 
