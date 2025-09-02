@@ -116,6 +116,11 @@ function closePopup() {
   flex-wrap: wrap;
   gap: 1.5rem;
 }
+@media (max-width: 356px) {
+  .gallery-grid {
+    gap: .5rem;
+  }
+}
 .gallery-item {
   display: flex;
   flex-direction: column;
@@ -167,9 +172,10 @@ function closePopup() {
 }
 .gallery-toggle-row {
   display: flex;
-  gap: 1.5rem;
+  gap: .5rem;
   justify-content: left;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 .gallery-toggle-btn {
   padding: 0.5rem 1.5rem;
