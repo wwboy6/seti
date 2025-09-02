@@ -18,18 +18,13 @@ import { RouterLink, RouterView } from 'vue-router'
 </template>
 
 <style scoped>
-header {
-  text-align: center;
-  margin-top: 2rem;
-}
-
 h1 {
   font-size: 2rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: .5rem;
 }
 
 nav {
-  margin-bottom: 2rem;
+  margin-bottom: .5rem;
 }
 
 nav a {

@@ -21,6 +21,16 @@ a,
   }
 }
 
+header {
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+header, main {
+  padding: 0 10px;
+}
+
 @media (min-width: 1024px) {
   body {
     display: flex;
@@ -31,5 +41,9 @@ a,
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
+  }
+
+  header {
+    text-align: right;
   }
 }

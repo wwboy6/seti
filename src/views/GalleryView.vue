@@ -168,7 +168,7 @@ function closePopup() {
 .gallery-toggle-row {
   display: flex;
   gap: 1.5rem;
-  justify-content: center;
+  justify-content: left;
   margin-bottom: 2rem;
 }
 .gallery-toggle-btn {

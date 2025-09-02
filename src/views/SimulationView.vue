@@ -288,7 +288,6 @@ function onSectorRotationInput(event: Event, idx: number) {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
   gap: 0.5rem;
 }
 .spin-label {
@@ -386,7 +385,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin: 2rem;
 }
 
 .solar-image {
